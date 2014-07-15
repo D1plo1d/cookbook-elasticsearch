@@ -102,6 +102,15 @@ bash "Ensure proper permissions for #{node.elasticsearch[:dir]}/#{elasticsearch}
   EOS
 end
 
+## Run Maven to build elastic search
+bash "Build elasticsearch via maven" do
+  cwd "#{node.elasticsearch[:dir]}/#{elasticsearch}"
+  user    "root"
+  code    <<-EOS
+    mvn clean package -DskipTests
+  EOS
+end
+
 # Symlink binaries
 #
 %w| elasticsearch plugin |.each do |f|
