@@ -109,6 +109,7 @@ bash "Build elasticsearch via maven" do
   code    <<-EOS
     mvn clean package -DskipTests
   EOS
+  not_if { ::File.exists?("#{node.elasticsearch[:dir]}/#{elasticsearch}/lib/#{elasticsearch}.jar")  }
 end
 
 # Symlink binaries
