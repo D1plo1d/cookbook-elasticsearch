@@ -4,7 +4,7 @@ settings = Chef::DataBagItem.load('elasticsearch', 'settings') rescue {}
 
 # === VERSION ===
 #
-default.elasticsearch[:version]   = "0.19.3"
+default.elasticsearch[:version]   = "1.2.2"
 
 # === PATHS ===
 #
