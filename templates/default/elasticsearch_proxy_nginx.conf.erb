@@ -1,9 +1,25 @@
+<% ssl_domain = node.elasticsearch[:nginx][:ssl_domain] %>
+
 server {
-  listen   <%= node.elasticsearch[:nginx][:port] %>;
+  <% if ssl_domain.nil? %>
+    listen   <%= node.elasticsearch[:nginx][:port] %>;
+  <% else %>
+    listen   <%= 443 %>;
+  <% end %>
+
   server_name  elasticsearch;
 
   error_log   <%= node.elasticsearch[:nginx][:log_dir] %>/elasticsearch-errors.log;
   access_log  <%= node.elasticsearch[:nginx][:log_dir] %>/elasticsearch.log;
+
+  <% unless ssl_domain.nil? %>
+    ssl on;
+    ssl_certificate /etc/nginx/ssl/<%= ssl_domain %>.crt;
+    ssl_certificate_key /etc/nginx/ssl/<%= ssl_domain %>.key;
+    <% if node.elasticsearch[:nginx][:use_ssl_ca] %>
+      ssl_client_certificate /etc/nginx/ssl/<%= ssl_domain %>.ca;
+    <% end %>
+  <% end %>
 
   location / {
 
@@ -25,16 +41,6 @@ server {
     auth_basic           "ElasticSearch";
     auth_basic_user_file <%= node.elasticsearch[:nginx][:passwords_file] %>;
 
-
-    <% ssl_domain = node.elasticsearch[:nginx][:ssl_domain] %>
-    <% unless ssl_domain.nil? %>
-      ssl on;
-      ssl_certificate /etc/nginx/ssl/<%= ssl_domain %>.crt;
-      ssl_certificate_key /etc/nginx/ssl/<%= ssl_domain %>.key;
-      <% if node.elasticsearch[:nginx][:use_ssl_ca] %>
-      ssl_client_certificate /etc/nginx/ssl/<%= ssl_domain %>.ca;
-      <% end %>
-    <% end %>
   }
 
 }
