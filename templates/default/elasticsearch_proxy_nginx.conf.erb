@@ -16,7 +16,7 @@ server {
     # Pass requests to ElasticSearch
     proxy_pass http://localhost:9200;
     proxy_redirect off;
-      
+
     proxy_set_header  X-Real-IP  $remote_addr;
     proxy_set_header  X-Forwarded-For $proxy_add_x_forwarded_for;
     proxy_set_header  Host $http_host;
@@ -25,6 +25,15 @@ server {
     auth_basic           "ElasticSearch";
     auth_basic_user_file <%= node.elasticsearch[:nginx][:passwords_file] %>;
 
+
+    <% if node.elasticsearch[:ssl_domain].nil? == false %>
+      ssl on;
+      ssl_certificate /etc/nginx/ssl/<%= node.elasticsearch[:ssl_domain] %>.crt;
+      ssl_certificate_key /etc/nginx/ssl/<%= node.elasticsearch[:ssl_domain] %>.key;
+      <% if node.elasticsearch[:use_ssl_ca] -%>
+      ssl_client_certificate /etc/nginx/ssl/<%= node.elasticsearch[:ssl_domain] %>.ca;
+      <% end -%>
+    <% end %>
   }
 
 }
