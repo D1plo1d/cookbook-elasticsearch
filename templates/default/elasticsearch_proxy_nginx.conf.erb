@@ -24,10 +24,10 @@ server {
   location / {
 
     # Deny access to Cluster API
-    if ($request_filename ~ "_cluster") {
-      return 403;
-      break;
-    }
+    # if ($request_filename ~ "_cluster") {
+    #   return 403;
+    #   break;
+    # }
 
     # Pass requests to ElasticSearch
     proxy_pass http://localhost:9200;
