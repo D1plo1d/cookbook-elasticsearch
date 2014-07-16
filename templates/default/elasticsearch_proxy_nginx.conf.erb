@@ -26,12 +26,13 @@ server {
     auth_basic_user_file <%= node.elasticsearch[:nginx][:passwords_file] %>;
 
 
-    <% if node.elasticsearch[:ssl_domain].nil? == false %>
+    <% ssl_domain = node.elasticsearch[:nginx][:ssl_domain] %>
+    <% unless ssl_domain.nil? %>
       ssl on;
-      ssl_certificate /etc/nginx/ssl/<%= node.elasticsearch[:ssl_domain] %>.crt;
-      ssl_certificate_key /etc/nginx/ssl/<%= node.elasticsearch[:ssl_domain] %>.key;
-      <% if node.elasticsearch[:use_ssl_ca] -%>
-      ssl_client_certificate /etc/nginx/ssl/<%= node.elasticsearch[:ssl_domain] %>.ca;
+      ssl_certificate /etc/nginx/ssl/<%= ssl_domain %>.crt;
+      ssl_certificate_key /etc/nginx/ssl/<%= ssl_domain %>.key;
+      <% if node.elasticsearch[:nginx][:use_ssl_ca] -%>
+      ssl_client_certificate /etc/nginx/ssl/<%= ssl_domain %>.ca;
       <% end -%>
     <% end %>
   }
