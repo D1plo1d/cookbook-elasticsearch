@@ -31,9 +31,9 @@ server {
       ssl on;
       ssl_certificate /etc/nginx/ssl/<%= ssl_domain %>.crt;
       ssl_certificate_key /etc/nginx/ssl/<%= ssl_domain %>.key;
-      <% if node.elasticsearch[:nginx][:use_ssl_ca] -%>
+      <% if node.elasticsearch[:nginx][:use_ssl_ca] %>
       ssl_client_certificate /etc/nginx/ssl/<%= ssl_domain %>.ca;
-      <% end -%>
+      <% end %>
     <% end %>
   }
 
