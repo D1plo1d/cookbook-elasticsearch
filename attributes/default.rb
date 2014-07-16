@@ -37,9 +37,6 @@ default.elasticsearch[:cluster_name]   = ( settings['cluster_name'] || "elastics
 default.elasticsearch[:index_shards]   = "5"
 default.elasticsearch[:index_replicas] = "1"
 
-default.elasticsearch[:ssl_domain] = nil
-default.elasticsearch[:use_ssl_ca] = true
-
 # === PERSISTENCE ===
 #
 default.elasticsearch[:gateway][:type] = nil
