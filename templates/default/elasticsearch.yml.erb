@@ -22,6 +22,11 @@ bootstrap.mlockall: true
 <% if node.elasticsearch[:discovery][:type] %>
 discovery.type: <%= node.elasticsearch[:discovery][:type] %>
 <% end %>
+
+<% if node.elasticsearch[:cloud][:aws][:region] %>
+cloud.aws.region: '<%= node.elasticsearch[:cloud][:aws][:region] %>'
+<% end %>
+
 <% unless node.elasticsearch[:cloud][:ec2].values.compact.empty? %>
 discovery.ec2.groups: '<%= node.elasticsearch[:cloud][:ec2][:security_group] %>'
 discovery.ec2.any_group: <%= node.elasticsearch[:cloud][:ec2][:any_group] %>
