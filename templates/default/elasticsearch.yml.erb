@@ -24,6 +24,7 @@ discovery.type: <%= node.elasticsearch[:discovery][:type] %>
 <% end %>
 <% unless node.elasticsearch[:cloud][:ec2].values.compact.empty? %>
 discovery.ec2.groups: '<%= node.elasticsearch[:cloud][:ec2][:security_group] %>'
+discovery.ec2.any_group: <%= node.elasticsearch[:cloud][:ec2][:any_group] %>
 <% end %>
 
 <% unless node.elasticsearch[:cloud][:aws].values.compact.empty? %>
