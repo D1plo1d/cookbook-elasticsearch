@@ -10,7 +10,7 @@ ES_JAVA_OPTS="
   -server
   -Djava.net.preferIPv4Stack=true
   -Des.config=<%= node.elasticsearch[:conf_path] %>/elasticsearch.yml
-  -Xms<%= node.elasticsearch[:min_mem] %>
+  -Xms<%= node.elasticsearch[:min_mem] || node.elasticsearch[:max_mem] %>
   -Xmx<%= node.elasticsearch[:max_mem] %>
   -Xss1m
   -XX:+UseParNewGC
