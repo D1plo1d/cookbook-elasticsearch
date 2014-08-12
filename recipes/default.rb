@@ -70,6 +70,13 @@ bash "increase limits for the elasticsearch user" do
   not_if { ::File.read("/etc/security/limits.conf").include?("#{node.elasticsearch.fetch(:user, "elasticsearch")}     -    nofile")  }
 end
 
+bash "increase mmap virtual memory limit" do
+  user 'root'
+  code <<-END
+    sysctl -w vm.max_map_count=#{node.elasticsearch[:limits][:max_map_count]}
+  END
+end
+
 # Download ES
 #
 remote_file "/tmp/elasticsearch-#{node.elasticsearch[:version]}.tar.gz" do
