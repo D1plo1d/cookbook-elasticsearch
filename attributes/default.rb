@@ -32,6 +32,9 @@ default.elasticsearch[:limits]  = {}
 default.elasticsearch[:limits][:memlock] = 'unlimited'
 default.elasticsearch[:limits][:nofile]  = '64000'
 default.elasticsearch[:limits][:max_map_count] = '262144'
+# Sets the kernel's swappiness (it's tendancy to swap unused application
+# memory). Setting swappiness to false will keep the default kernal value.
+default.elasticsearch[:limits][:swappiness] = '1'
 
 # === SETTINGS ===
 #

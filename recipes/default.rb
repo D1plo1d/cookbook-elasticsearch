@@ -77,6 +77,15 @@ bash "increase mmap virtual memory limit" do
   END
 end
 
+if node.elasticsearch[:limits][:swappiness]
+  bash "set kernel swappiness" do
+    user 'root'
+    code <<-END
+      sysctl -w vm.swappiness=#{node.elasticsearch[:limits][:swappiness]}
+    END
+  end
+end
+
 # Download ES
 #
 remote_file "/tmp/elasticsearch-#{node.elasticsearch[:version]}.tar.gz" do
