@@ -47,7 +47,10 @@ stop() {
       while [ -f $PIDFILE  ]; do
         echo -n '.'
         (( timeout++ ))
-        if [ $timeout -gt '15' ]; then return; fi
+        if [ $timeout -gt '60' ]; then
+          echo -e "\033[1mTimed out attempting to stop elasticsearch\033[0m"
+          exit 1
+        fi
         sleep 1
       done; echo
       return $r
