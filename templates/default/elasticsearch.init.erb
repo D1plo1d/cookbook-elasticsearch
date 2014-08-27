@@ -37,12 +37,17 @@ stop() {
         echo -e "\033[1mPID file found, but no matching process running?\033[0m"
         echo    "Removing PID file..."
         su <%= node[:elasticsearch][:user] %> -c "rm $PIDFILE"
-        exit 0
+        return 0
       fi
 
       # KILL PROCESS
       su <%= node[:elasticsearch][:user] %> -c "kill $(cat $PIDFILE)"
       r=$?
+      if [ $r -gt '0' ]; then
+        echo -e "\033[1mError killing elasticsearch\033[0m"
+        exit 1
+      fi
+
       timeout=0
       while [ -f $PIDFILE  ]; do
         echo -n '.'
@@ -53,6 +58,8 @@ stop() {
         fi
         sleep 1
       done; echo
+      echo    "Removing PID file..."
+      su <%= node[:elasticsearch][:user] %> -c "rm $PIDFILE"
       return $r
     else
       echo -e "\033[1mNo PID file found -- elasticsearch not running?\033[0m"
