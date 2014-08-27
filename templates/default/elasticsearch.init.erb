@@ -1,4 +1,4 @@
-#!/usr/bin/env bash -v
+#!/usr/bin/env bash
 #
 # elasticsearch
 #
@@ -6,6 +6,9 @@
 # description: elasticsearch
 # processname: elasticsearch
 # config:      <%= node[:elasticsearch][:conf_path] %>/elasticsearch.yml
+
+# Verbose debug info
+set -x
 
 # Source networking configuration
 if [ -f /etc/sysconfig/network ]; then source /etc/sysconfig/network; fi

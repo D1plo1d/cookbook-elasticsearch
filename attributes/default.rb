@@ -17,12 +17,14 @@ default.elasticsearch[:pid_path]  = "/usr/local/var/run/elasticsearch"
 
 # === MEMORY ===
 #
-# Maximum amount of memory to use is automatically computed as 1/2 of total available memory.
+# Maximum amount of memory to use is automatically computed as 1/2 of total
+# available memory (although it has a lower limit of 512MB since ElasticSearch
+# may crash with memory limits below that).
 # You may choose to configure it in your node configuration instead.
 #
 # Setting min_mem to false will cause the min_mem to equal the max_mem.
 #
-max_mem = "#{(node.memory.total.to_i/2) / 1024}m"
+max_mem = "#{[(node.memory.total.to_i/2) / 1024, 512].max}m"
 default.elasticsearch[:min_mem] = false
 default.elasticsearch[:max_mem] = max_mem
 
