@@ -32,7 +32,7 @@ start() {
 }
 
 stop() {
-    if [[ -f $PIDFILE ]]; then
+    if [[ -s $PIDFILE ]]; then
       echo -n -e "\033[1mStopping elasticsearch...\033[0m"
 
       # REMOVE PIDFILE AND EXIT IF PROCESS NOT RUNNING
@@ -43,11 +43,9 @@ stop() {
         return 0
       fi
 
-      # KILL PROCESS
+      # KILL PROCESS (using it's pidfile)
+      if [$(cat $PIDFILE)
       su <%= node[:elasticsearch][:user] %> -c "kill $(cat $PIDFILE)"
-      # KILL PROCESS (if the pidfile is empty, which it is for unknown reasons
-      # sometimes)
-      su <%= node[:elasticsearch][:user] %> -c "kill $CHECK_PID_RUNNING"
       timeout=0
       while [ -f $PIDFILE  ]; do
         echo -n '.'
@@ -62,7 +60,15 @@ stop() {
       su <%= node[:elasticsearch][:user] %> -c "rm $PIDFILE"
       return 0
     else
-      echo -e "\033[1mNo PID file found -- elasticsearch not running?\033[0m"
+      # KILL PROCESS (if the pidfile is empty but es is running, which it is
+      # for unknown reasons sometimes)
+      if [ $CHECK_PID_RUNNING ]; then
+        su <%= node[:elasticsearch][:user] %> -c "kill $CHECK_PID_RUNNING"
+      fi
+      # Removing the PID file if it exists but is empty.
+      su <%= node[:elasticsearch][:user] %> -c "rm $PIDFILE"
+      # Alerting the user
+      echo -e "\033[1mNo PID file found or empty PID file -- elasticsearch not running?\033[0m"
     fi
 }
 
