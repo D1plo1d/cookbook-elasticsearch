@@ -46,8 +46,6 @@ stop() {
       # KILL PROCESS
       su <%= node[:elasticsearch][:user] %> -c "kill $(cat $PIDFILE)"
       r=$?
-      if [ $r -gt '0' ]; then return $r; fi
-
       timeout=0
       while [ -f $PIDFILE  ]; do
         echo -n '.'
