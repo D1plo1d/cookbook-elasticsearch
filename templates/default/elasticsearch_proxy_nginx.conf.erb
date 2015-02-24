@@ -10,7 +10,11 @@ server {
   server_name  elasticsearch;
 
   error_log   <%= node.elasticsearch[:nginx][:log_dir] %>/elasticsearch-errors.log;
-  access_log  <%= node.elasticsearch[:nginx][:log_dir] %>/elasticsearch.log;
+  <% if node.elasticsearch[:nginx][:disable_access_log] %>
+    access_log off;
+  <% else %>
+    access_log  <%= node.elasticsearch[:nginx][:log_dir] %>/elasticsearch.log;
+  <% end %>
 
   <% unless ssl_domain.nil? %>
     ssl on;
