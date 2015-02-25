@@ -1,5 +1,20 @@
-.DS_Store
+*~
+*#
+.#*
+\#*#
+.*.sw[a-z]
+*.un~
+pkg/
+
+# Berkshelf
 .vagrant
-tmp/
-!tmp/.gitignore
-!tmp/cookbooks/.gitignore
+/cookbooks
+Berksfile.lock
+
+# Bundler
+Gemfile.lock
+bin/*
+.bundle/*
+
+.kitchen/
+.kitchen.local.yml
